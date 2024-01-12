@@ -1,0 +1,37 @@
+npm create vite@latest
+
+npm i
+@reduxjs/toolkit
+react-redux
+react-router-dom
+appwrite
+@tinymce/tinymce-react
+html-react-parser
+react-hook-form
+
+install tailwind 
+
+1) npm install -D tailwindcss postcss autoprefixer
+   npx tailwindcss init -p
+
+2) tailwind.config.js
+
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+
+3) index.css
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+npm run dev
