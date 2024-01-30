@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Input from './components/Input'
 import useCurrencyInfo from './hooks/useCurrencyInfo'
 import './App.css'
@@ -11,10 +11,14 @@ function App() {
 
   const currencyOptions = useCurrencyInfo(fromCurrency)
 
-  const convertCurrency = () => {
+  const convertCurrency = useCallback(() => {
     const toCurrencyRate = currencyOptions[toCurrency]
     setToAmount(fromAmount * toCurrencyRate)
-  }
+  }, [fromAmount, toAmount, fromCurrency, toCurrency, currencyOptions])
+
+  useEffect(() => {
+    convertCurrency()
+  }, [fromAmount, toAmount, fromCurrency, toCurrency, currencyOptions])
 
   const swapInput = () => {
     setFromAmount(toAmount)
@@ -50,12 +54,12 @@ function App() {
           setCurrency={setToCurrency}
           currencyOptions={currencyOptions}
         />
-        <button
+        {/* <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-5"
           onClick={convertCurrency}
         >
           Convert {fromCurrency.toUpperCase()} to {toCurrency.toUpperCase()}
-        </button>
+        </button> */}
       </div>
     </>
   )
