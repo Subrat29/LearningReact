@@ -9,7 +9,7 @@ function App() {
   // useRef hook
   const passwordRef = useRef(null);
 
-  const copyPasswordToClipboard = useCallback(()=>{
+  const copyPasswordToClipboard = useCallback(() => {
     passwordRef.current?.select();
     passwordRef.current?.setSelectionRange(0, 101);
     window.navigator.clipboard.writeText(password);
@@ -22,15 +22,15 @@ function App() {
     if (charAllowed) str += "!@#$%^&*()_+-=[]{}|\\;:'\"<>,.?/`~";
 
     for (let i = 0; i < length; i++) {
-      let char = Math.floor(Math.random() * str.length +1);
+      let char = Math.floor(Math.random() * str.length + 1);
       pass += str.charAt(char);
     }
 
     setPassword(pass);
-    
+
   }, [length, numAllowed, charAllowed, setPassword]);
 
-  useEffect(()=> {
+  useEffect(() => {
     passwordGenerator()
   }, [length, numAllowed, charAllowed, passwordGenerator])
 
@@ -52,51 +52,51 @@ function App() {
         />
         {/* copy button */}
         <button
-        onClick={copyPasswordToClipboard}
-        className='outline-none bg-blue-600 text-white px-3 py-0.5 shrink-0 mx-1'>Copy</button>
+          onClick={copyPasswordToClipboard}
+          className='outline-none bg-blue-600 text-white px-3 py-0.5 shrink-0 mx-1'>Copy</button>
+      </div>
+
+      {/* length cursor */}
+      <div className='flex text-sm gap-x-2'>
+        <div className='flex items-center gap-x-1'>
+          <input
+            type="range"
+            min={6}
+            max={100}
+            value={length}
+            className='cursor-pointer'
+            onChange={(e) => { setLength(e.target.value) }}
+          />
+          <label>Length: {length}</label>
         </div>
 
-        {/* length cursor */}
-        <div className='flex text-sm gap-x-2'>
-          <div className='flex items-center gap-x-1'>
-            <input
-            type="range"
-            min = {6}
-            max = {100}
-            value = {length}
-            className='cursor-pointer'
-            onChange={(e) => {setLength(e.target.value)}} 
-            />
-            <label>Length: {length}</label>
-          </div>
-
-          {/* specialChar checkbox */}
-          <div className='flex items-center gap-x-1'>
-            <input 
+        {/* specialChar checkbox */}
+        <div className='flex items-center gap-x-1'>
+          <input
             type="checkbox"
             defaultChecked={charAllowed}
             id='characterInput'
-            onChange={()=>{
+            onChange={() => {
               setCharAllowed((prev) => !prev);
             }}
-             />
-             <label htmlFor="characterInput">Characters</label>
-          </div>
+          />
+          <label htmlFor="characterInput">Characters</label>
+        </div>
 
-          {/* numbers checkbox */}
-          <div className='flex items-center gap-x-1'>
-            <input 
+        {/* numbers checkbox */}
+        <div className='flex items-center gap-x-1'>
+          <input
             type="checkbox"
             defaultChecked={numAllowed}
             id='numberInput'
-            onChange={()=>{
+            onChange={() => {
               setNumAllowed((prev) => !prev);
             }}
-             />
-             <label htmlFor="numberInput">Numbers</label>
-          </div>
-
+          />
+          <label htmlFor="numberInput">Numbers</label>
         </div>
+
+      </div>
     </div>
   );
 }
