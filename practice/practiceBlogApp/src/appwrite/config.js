@@ -1,5 +1,5 @@
 import conf from '../conf/conf'
-import { Client, Databases, ID, Query } from "appwrite";
+import { Client, Databases, Query } from "appwrite";
 
 export class ConfigService {
     client = new Client();
@@ -22,8 +22,8 @@ export class ConfigService {
                     title,
                     content,
                     image,
+                    status,
                     userId,
-                    status
                 }
             )
         } catch (error) {
@@ -45,12 +45,12 @@ export class ConfigService {
         }
     }
 
-    async getPosts() {
+    async getPosts(queries = [Query.equal("status", "active")]) {
         try {
             return await this.databases.listDocuments(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
-                [Query.equal("status", "active")]
+                queries
             )
         } catch (error) {
             console.log("appwrite/config/ConfigService/getPosts : ", error)
@@ -79,7 +79,7 @@ export class ConfigService {
 
     async deletePost(slug) {
         try {
-            await this.databases.updateDocument(
+            await this.databases.deleteDocument(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
                 slug

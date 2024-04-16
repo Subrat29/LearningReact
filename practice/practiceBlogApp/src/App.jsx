@@ -34,7 +34,13 @@ function App() {
         <Footer />
       </div>
     </div>
-  ) : (<div>Loading...</div>)
+  ) : (
+    <div className='min-h-screen flex flex-wrap content-between bg-gray-400'>
+      <div className='w-full block'>
+        <h1 className='text-5xl flex items-center justify-center w-full'>Loading...</h1>
+      </div>
+    </div>
+  )
 }
 
 export default App

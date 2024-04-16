@@ -15,7 +15,7 @@ function App() {
     htmlClassList.remove("dark", "light")
     htmlClassList.add(theme)
   }
-  ),[theme]
+  ), [theme]
 
   return (
     <ThemeProvider value={{ theme, toggleTheme }}>
