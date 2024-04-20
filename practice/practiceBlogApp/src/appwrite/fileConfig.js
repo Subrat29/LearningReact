@@ -14,7 +14,9 @@ export class FileService {
 
     async uploadImage(file) {
         try {
-            return await this.storage.createFile(conf.appwriteBucketId, ID.unique(), file)
+            const response = await this.storage.createFile(conf.appwriteBucketId, ID.unique(), file)
+            console.log("appwrite/uploadImage/response: ", response);
+            return response
         } catch (error) {
             console.log("appwrite/fileConfig/FileService/uploadImage : ", error)
             return false;
@@ -41,7 +43,9 @@ export class FileService {
 
     async updateImage(fileId) {
         try {
-            return await this.storage.updateFile(conf.appwriteBucketId, fileId)
+            const response = await this.storage.updateFile(conf.appwriteBucketId, fileId)
+            console.log("Fileservice/updateImage/response: ", response);
+            return response;
         } catch (error) {
             console.log("appwrite/fileConfig/FileService/updateImage : ", error)
             return false;
@@ -50,7 +54,8 @@ export class FileService {
 
     async deleteImage(fileId) {
         try {
-            return await this.storage.deleteFile(conf.appwriteBucketId, fileId)
+            await this.storage.deleteFile(conf.appwriteBucketId, fileId)
+            return true
         } catch (error) {
             console.log("appwrite/fileConfig/FileService/deleteImage : ", error)
             return false;

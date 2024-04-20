@@ -8,18 +8,23 @@ import parse from "html-react-parser";
 
 function Post() {
     const [post, setPost] = useState(null)
+    const [imageUrl, setImageUrl] = useState(null)
     const { slug } = useParams()
     const navigate = useNavigate()
     const userData = useSelector((state) => state.auth.userData)
     const isAuthor = post && userData ? (post.userId === userData.$id) : false
 
+    
     useEffect(() => {
         if (slug) {
             configservice.getPost(slug).then((post) => {
-                if (post)
+                if (post) {
                     setPost(post)
-                else
+                    fetchImageUrl(post.image)
+                }
+                else {
                     navigate('/')
+                }
             })
         }
         else {
@@ -27,9 +32,14 @@ function Post() {
         }
     }, [slug, navigate])
 
+    const fetchImageUrl = async (image) => {
+        const url = await fileservice.getImagePreview(image)
+        setImageUrl(url)
+    }
+
     const deletePost = () => {
         if (post) {
-            configservice.deletePost(post.$id).then((status) => {  //replace: slug to post.$id
+            configservice.deletePost(slug).then((status) => {  //replace: slug to post.$id
                 if (status) {
                     fileservice.deleteImage(post.image)
                     navigate('/')
@@ -42,16 +52,23 @@ function Post() {
         <div className="py-8">
             <Container>
                 <div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
-                    <img
-                        src={fileservice.getImagePreview(post.image)}
-                        alt={post.title}
-                        className="rounded-xl"
-                    />
+                    {imageUrl && (
+                        <img
+                            src={imageUrl}
+                            alt={post.title}
+                            className="rounded-xl"
+                        />
+                    )}
 
                     {isAuthor && (
                         <div className="absolute right-6 top-6">
-                            <Link to={`/edit-post/${post.$id}`}>
+                            <Link to={`/`}>
                                 <Button bgColor="bg-green-500" className="mr-3">
+                                    Save
+                                </Button>
+                            </Link>
+                            <Link to={`/edit-post/${post.$id}`}>
+                                <Button bgColor="bg-yellow-500" className="mr-3">
                                     Edit
                                 </Button>
                             </Link>

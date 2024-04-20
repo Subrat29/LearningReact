@@ -14,7 +14,7 @@ export class ConfigService {
 
     async createPost({ title, slug, content, image, userId, status }) {
         try {
-            return await this.databases.createDocument(
+            const response = await this.databases.createDocument(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
                 slug,
@@ -26,6 +26,8 @@ export class ConfigService {
                     userId,
                 }
             )
+            console.log("appwrite/createPost/response: ", response);
+            return response
         } catch (error) {
             console.log("appwrite/config/ConfigService/createPost : ", error)
             return false
@@ -34,11 +36,13 @@ export class ConfigService {
 
     async getPost(slug) {
         try {
-            return await this.databases.getDocument(
+            const response = await this.databases.getDocument(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
                 slug
             )
+            // console.log("getPost/response: ", response);
+            return response
         } catch (error) {
             console.log("appwrite/config/ConfigService/getPost : ", error)
             return false
@@ -47,11 +51,13 @@ export class ConfigService {
 
     async getPosts(queries = [Query.equal("status", "active")]) {
         try {
-            return await this.databases.listDocuments(
+            const response = await this.databases.listDocuments(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
                 queries
             )
+            // console.log("getPosts/response: ", response);
+            return response
         } catch (error) {
             console.log("appwrite/config/ConfigService/getPosts : ", error)
             return false
@@ -60,7 +66,7 @@ export class ConfigService {
 
     async updatePost(slug, { title, content, image, status }) {
         try {
-            return await this.databases.updateDocument(
+            const response = await this.databases.updateDocument(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
                 slug,
@@ -71,6 +77,8 @@ export class ConfigService {
                     status
                 }
             )
+            console.log("configservice/updatePost/response: ", response);
+            return response
         } catch (error) {
             console.log("appwrite/config/ConfigService/updatePost : ", error)
             return false;

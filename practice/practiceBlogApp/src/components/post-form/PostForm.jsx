@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Button, Input, RTE, Select } from "..";
 import configservice from '../../appwrite/config'
@@ -20,17 +20,15 @@ function PostForm({ post }) {
     )
     const navigate = useNavigate();
     const userData = useSelector((state) => state.auth.userData);
-    console.log("postForm/Post: ", post);
-    console.log("postForm/userData: ", userData);
-
+    const [imageUrl, setImageUrl] = useState(null)
 
     const submit = async (data) => {
         // update post
         if (post) {
             console.log("Update Post");
-            const file = data.image[0] ? fileservice.updateImage(data.image[0]) : null
+            const file = data.image[0] ? await fileservice.uploadImage(data.image[0]) : null
             if (file) {
-                fileservice.deleteImage(fileservice.deleteImage(post.image))
+                fileservice.deleteImage(post.image)
             }
             const dbPost = await configservice.updatePost(post.$id,
                 {
@@ -43,24 +41,20 @@ function PostForm({ post }) {
         }
         else {
             // create post
+            console.log("Create Post");
             console.log("postForm/NewPost/data.image[0]: ", data.image[0]);
 
-            const file = await data.image[0] ? fileservice.uploadImage(data.image[0]) : null
+            const file = data.image[0] ? await fileservice.uploadImage(data.image[0]) : null
+            console.log("image: ", file);
 
-            console.log("postForm/NewPost/ImageUpload: ", file);
-
-            if (file) {
-                const fileId = file.$id
-                data.image = fileId
-                const dbPost = await configservice.createPost({
-                    ...data,
-                    userId: userData.$id
-                })
-                console.log("postForm/NewPost/createPost: ", dbPost);
-
-                if (dbPost) {
-                    navigate(`/post/${dbPost.$id}`)
-                }
+            const fileId = file?.$id || 'N/A'
+            data.image = fileId
+            const dbPost = await configservice.createPost({
+                ...data,
+                userId: userData.$id ? userData.$id : 'N/A'
+            })
+            if (dbPost) {
+                navigate(`/post/${dbPost.$id}`)
             }
         }
     }
@@ -85,6 +79,13 @@ function PostForm({ post }) {
         }
     }, [watch, slugTransform, setValue])
 
+    const getImageUrl = async () => {
+        const url = await fileservice.getImagePreview(post.image)
+        setImageUrl(url)
+    }
+    if (post) {
+        getImageUrl()
+    }
 
     return (
         <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
@@ -112,12 +113,12 @@ function PostForm({ post }) {
                     type="file"
                     className="mb-4"
                     accept="image/png, image/jpg, image/jpeg, image/gif"
-                    {...register("image", { required: !post })}
+                    {...register("image", { required: false })} //TODO
                 />
                 {post && (
                     <div className="w-full mb-4">
                         <img
-                            src={fileservice.getImagePreview(post.image)}
+                            src={imageUrl}
                             alt={post.title}
                             className="rounded-lg"
                         />

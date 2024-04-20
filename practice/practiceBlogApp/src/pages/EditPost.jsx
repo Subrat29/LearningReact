@@ -8,11 +8,15 @@ function EditPost() {
     const { slug } = useParams()
     const navigate = useNavigate()
 
+    console.log('EditPost/slug: ', slug);
+    console.log('EditPost/post: ', post);
+
     useEffect(() => {
         if (slug) {
             configservice.getPost(slug).then((post) => {
-                if (post)
-                    setPost(post.documents)
+                if (post) {
+                    setPost(post)
+                }
             })
         }
         else {

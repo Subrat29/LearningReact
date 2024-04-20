@@ -5,13 +5,13 @@ import configservice from '../appwrite/config'
 function AllPost() {
 
     const [posts, setPosts] = useState([])
-    useEffect(() => { 
+    useEffect(() => {
         configservice.getPosts([]).then((posts) => {
             if (posts) {
                 setPosts(posts.documents)
             }
         })
-    },[posts, setPosts])
+    },[])
 
     return (
         <div className='w-full py-8'>
