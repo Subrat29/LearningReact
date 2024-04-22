@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom'
 function PostCard({ post }) {
     const { $id, title, image, userId, $updatedAt } = post;
     const [imageUrl, setImageUrl] = useState(null)
-    
 
     useEffect(() => {
         const fetchImageUrl = async () => {
@@ -14,8 +13,6 @@ function PostCard({ post }) {
         }
         fetchImageUrl()
     }, [image])
-
-    useEffect(() => { }, [])
 
     return (
         <Link to={`/post/${$id}`}>

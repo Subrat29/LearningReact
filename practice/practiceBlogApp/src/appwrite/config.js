@@ -41,7 +41,7 @@ export class ConfigService {
                 conf.appwriteCollectionId,
                 slug
             )
-            // console.log("getPost/response: ", response);
+            console.log("getPost/response: ", response);
             return response
         } catch (error) {
             console.log("appwrite/config/ConfigService/getPost : ", error)
@@ -56,7 +56,7 @@ export class ConfigService {
                 conf.appwriteCollectionId,
                 queries
             )
-            // console.log("getPosts/response: ", response);
+            console.log("getPosts/response: ", response);
             return response
         } catch (error) {
             console.log("appwrite/config/ConfigService/getPosts : ", error)
